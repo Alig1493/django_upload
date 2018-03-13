@@ -1,0 +1,33 @@
+{% extends "upload/base.jinja2" %}
+
+{% block content %}
+    <h1 class="display-4">Upload File</h1>
+    {% if form.errors %}
+        <p class="text-danger text-center">Something went wrong! Please try again.</p>
+    {% endif %}
+    {#    {% if value %}#}
+    {#        {% if value.success %}#}
+    {#            <p class="text-success">{{ value.success }}</p>#}
+    {#            <a href="#" target="blank">#}
+    {#                <button class="btn btn-success btn-lg">Download File</button>#}
+    {#            </a>#}
+    {#        {% elif value.error %}#}
+    {#            <p class="text-danger">{{ value.error }}</p>#}
+    {#        {% endif %}#}
+    {#        <a class="btn btn-outline-info btn-lg" href="#" role="button">Go back to upload another file</a>#}
+    {#    {% else %}#}
+    <form id="upload-form" action="#" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <div class="custom-file">
+                {{ form.file_field }}
+                <label class="custom-file-label" for="inputGroupFile02">
+                    Choose file (.xls, .xlsx, .csv)
+                </label>
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" value="upload">Upload</button>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

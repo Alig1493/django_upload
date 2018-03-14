@@ -30,7 +30,7 @@
                 <tr>
                     <th scope="row">{{ file.id }}</th>
                     <td>
-                        <a href="{{ url('files:files-list',  }}">
+                        <a href="{{ file.file_field.url }}">
                             {{ file.file_field }}
                         </a>
                     </td>

@@ -5,23 +5,24 @@
         Your Files
     </h1>
     {% if messages %}
-        <ul class="messages">
+
             {% for message in messages %}
                 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                    <li class="text-success">{{ message }}</li>
+                    <p class="text-success">{{ message }}</p>
                 {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-                    <li class="text-warning">{{ message }}</li>
+                    <p class="text-warning">{{ message }}</p>
                 {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                    <li class="text-danger">{{ message }}</li>
+                    <p class="text-danger">{{ message }}</p>
                 {% endif %}
             {% endfor %}
-        </ul>
+
     {% endif %}
     <div class="panel">
         <table class="table">
             <thead class="thead-light">
             <tr>
-                <th scope="col">Primary Key</th>
+                <th scope="col">Index</th>
+                <th scope="col">Created Date</th>
                 <th scope="col">Filename</th>
             </tr>
             </thead>
@@ -29,6 +30,7 @@
             {% for file in files %}
                 <tr>
                     <th scope="row">{{ file.id }}</th>
+                    <th scope="row">{{ file.created_at.strftime('%A, %B %m, %Y at %I:%M:%S %p') }}</th>
                     <td>
                         <a href="{{ file.file_field.url }}">
                             {{ file.file_field }}

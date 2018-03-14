@@ -1,12 +1,9 @@
-from django.conf.global_settings import MEDIA_ROOT
 from django.contrib import messages
-from django.shortcuts import render
-from django.views.static import serve
 from django.urls import reverse
-from django.views.generic import TemplateView, FormView, ListView
+from django.views.generic import FormView, ListView
 
 from upload.forms import FileForm
-from upload.models import File
+from upload.models import File, FileDownload
 
 
 class UploadView(FormView):
@@ -25,7 +22,7 @@ class UploadView(FormView):
 
 class FileListView(ListView):
 
-    model = File
-    queryset = File.objects.order_by('-id')
+    model = FileDownload
+    queryset = FileDownload.objects.order_by('-id')
     context_object_name = "files"
     template_name = "upload/file_list.jinja2"

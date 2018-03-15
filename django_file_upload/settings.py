@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+
+import django_heroku
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -159,3 +161,5 @@ MEDIA_URL = '/files/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_files")
+
+django_heroku.settings(locals())

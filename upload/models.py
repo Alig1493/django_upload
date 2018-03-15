@@ -1,16 +1,17 @@
-import os
-
 from django.db import models
 from django.db.models.functions import datetime
+
+import os
 
 
 def name_file(filename, directory):
 
     date = datetime.datetime.today()
-
     filename, ext = os.path.splitext(filename)
 
-    return f"{filename}_{date.day}_{date.month}_{date.year}{ext}"
+    filename = f"{filename}_{date.day}_{date.month}_{date.year}_{date.microsecond}{ext}"
+
+    return f"{directory}/{filename}"
 
 
 def uploads_directory_path(instance, filename):

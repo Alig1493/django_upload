@@ -1,1 +1,1 @@
-web: gunicorn django_file_upload.wsgi --log-file -
+web: gunicorn django_file_upload.wsgi --timeout 200 --keep-alive 5 --log-file -

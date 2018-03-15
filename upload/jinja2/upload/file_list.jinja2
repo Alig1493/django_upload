@@ -38,8 +38,10 @@
                     <th scope="row">
                         {{ loop.index }}
                     </th>
-{#                    at %I:%M:%S %p#}
-                    <th scope="row">{{ file.created_at.strftime('%c') }}</th>
+                    <th scope="row">
+                        {{ file.created_at|localtime|date }}
+                        {{ file.created_at|localtime|time }}
+                    </th>
                     <td>
                         <a href="{{ file.file_field.url }}">
                             {{ file.filename() }}

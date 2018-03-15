@@ -17,17 +17,18 @@ def match_strings(d, string):
     return mylist
 
 
-def process_file():
-    input_file_path = f"{settings.MEDIA_ROOT}/uploads/U2-master_knitting_plan-8th_Feb_uBJbqqP.xlsx"
+def process_file(input_file_path):
+    # input_file_path = f"{settings.MEDIA_ROOT}/uploads/U2-master_knitting_plan-8th_Feb_uBJbqqP.xlsx"
 
     file_save_path = f"{settings.MEDIA_ROOT}/downloads"
 
     if not os.path.exists(f"{settings.MEDIA_ROOT}/downloads"):
         os.makedirs(file_save_path, exist_ok=True)
 
-    file_name = "Confirmed Loading - SQCL-2.xlsx"
+    file_names = ["Confirmed Loading - Auto.xlsx", "Confirmed Loading - Semi Auto.xlsx",
+                  "Confirmed Loading - SQCL-2.xlsx"]
 
-    final_path = os.path.join(file_save_path, file_name)
+    final_paths = [os.path.join(file_save_path, names) for names in file_names]
 
     excel_file = pd.ExcelFile(input_file_path)
 
@@ -84,7 +85,7 @@ def process_file():
 
         df_temp1 = pd.DataFrame(df_temp1)
         df_out1 = pd.concat([df_out1, df_temp1], axis=0)
-        df_out1.to_excel("Confirmed Loading - Auto.xlsx",
+        df_out1.to_excel(final_paths[0],
                          columns=['Prod Month', 'Buyer', 'Style', 'Machine Type', 'Machine Days', 'Pcs', 'SAH'],
                          index=None)
 
@@ -131,9 +132,16 @@ def process_file():
 
         df_temp2 = pd.DataFrame(df_temp2)
         df_out2 = pd.concat([df_out2, df_temp2], axis=0)
-        df_out2.to_excel("Confirmed Loading - Semi Auto.xlsx",
+        df_out2.to_excel(final_paths[1],
                          columns=['Prod Month', 'Buyer', 'Style', 'Machine Type', 'Machine Days', 'Pcs', 'SAH'],
                          index=None)
+
+        for i in range(2):
+            with open(final_paths[i], 'rb') as f:
+                output_file = FileDownload()
+                output_file.file_field.save(name=file_names[i], content=File(f))
+
+            os.remove(final_paths[i])
 
     else:
         df = pd.read_excel(input_file_path, sheet_name="M PLAN ", header=None)
@@ -185,10 +193,12 @@ def process_file():
         df_temp = pd.DataFrame(df_temp)
         df_out = pd.concat([df_out, df_temp], axis=0)
 
-        df_out.to_excel(final_path,
+        df_out.to_excel(final_paths[2],
                         columns=['Prod Month', 'Buyer', 'Style', 'Machine Type', 'Machine Days', 'Pcs', 'SAH'],
                         index=None)
 
-        with open(final_path, 'rb') as f:
+        with open(final_paths[2], 'rb') as f:
             output_file = FileDownload()
-            output_file.file_field.save(name=file_name, content=File(f))
+            output_file.file_field.save(name=file_names[2], content=File(f))
+
+        os.remove(final_paths[2])

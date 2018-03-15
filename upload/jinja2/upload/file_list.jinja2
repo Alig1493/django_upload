@@ -1,5 +1,9 @@
 {% extends "upload/base.jinja2" %}
 
+{% block title %}
+    Files List
+{% endblock title %}
+
 {% block content %}
     <h1 class="display-4">
         Your Files
@@ -20,26 +24,38 @@
     <div class="panel">
         <table class="table">
             <thead class="thead-light">
-            <tr>
-                <th scope="col">Index</th>
-                <th scope="col">Created Date</th>
-                <th scope="col">Filename</th>
-            </tr>
-            </thead>
-            <tbody>
             {% for file in files %}
+                {% if loop.first %}
+                    <tr>
+                        <th scope="col">Index</th>
+                        <th scope="col">Created Date</th>
+                        <th scope="col">Filename</th>
+                    </tr>
+                    </thead>
+                {% endif %}
+                <tbody>
                 <tr>
-                    <th scope="row">{{ file.id }}</th>
+                    <th scope="row">
+                        {{ loop.index }}
+                    </th>
                     <th scope="row">{{ file.created_at.strftime('%A, %B %m, %Y at %I:%M:%S %p') }}</th>
                     <td>
                         <a href="{{ file.file_field.url }}">
-                            {{ file.file_field }}
+                            {{ file.filename() }}
                         </a>
                     </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <th scope="row">
+                        No data present!
+                    </th>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <a class="btn btn-info btn-lg" href="{{ url('files:files-upload') }}" role="button">Upload a file</a>
 
 {% endblock content %}

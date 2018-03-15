@@ -1,17 +1,16 @@
 import os
 
-from django.conf import settings
 from django.db import models
+from django.db.models.functions import datetime
 
 
 def name_file(filename, directory):
 
-    number = len(os.listdir(f"{settings.MEDIA_ROOT}/{directory}"))
+    date = datetime.datetime.today()
+
     filename, ext = os.path.splitext(filename)
 
-    if number:
-        return f"{filename}_{number}{ext}"
-    return f"{filename}{ext}"
+    return f"{filename}_{date}{ext}"
 
 
 def uploads_directory_path(instance, filename):

@@ -10,7 +10,7 @@ def name_file(filename, directory):
 
     filename, ext = os.path.splitext(filename)
 
-    return f"{filename}_{date}{ext}"
+    return f"{filename}_{date.day}_{date.month}_{date.year}{ext}"
 
 
 def uploads_directory_path(instance, filename):

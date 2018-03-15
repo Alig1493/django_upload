@@ -104,6 +104,7 @@ WSGI_APPLICATION = 'django_file_upload.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+db_from_env = django_heroku.dj_database_url.config(conn_max_age=500)
 
 DATABASES = {
     # 'default': {
@@ -111,18 +112,17 @@ DATABASES = {
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
 
-    'default': {
-        'NAME': 'sq_uploads',
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    },
-}
+    # 'default': {
+    #     'NAME': 'sq_uploads',
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'root',
+    #     'HOST': '127.0.0.1',
+    #     'PORT': '5432',
+    # },
 
-db_from_env = django_heroku.dj_database_url.config(conn_max_age=500)
-DATABASES['default'] = 'HEROKU_POSTGRESQL_CYAN_URL'
+    'default': 'HEROKU_POSTGRESQL_CYAN_URL'
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

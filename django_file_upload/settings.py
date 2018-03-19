@@ -27,7 +27,7 @@ SECRET_KEY = '^8sg7bzv^iyvhr3+u&d@7&frskh1lw%4g6c-r1i=*3b2f_f@c8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -166,3 +166,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_files")
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+CELERY_BROKER_URL = 'pyamqp://guest@rabbitmq//'

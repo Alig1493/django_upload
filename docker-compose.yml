@@ -9,11 +9,29 @@ services:
     image: postgres:latest
   web:
     build: .
-    command: bash -c "./manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    command:
+      bash -c
+      "./manage.py migrate &&
+      gunicorn -w 4 --bind 0.0.0.0:8000
+                    --access-logfile=-
+                    --timeout=120 django_file_upload.wsgi:application"
     volumes:
       - .:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - rabbitmq
+
+  worker:
+    build: .
+    command:
+      bash -c
+      "sleep 10 && celery -A django_file_upload worker -l info --concurrency=10 --beat"
+    volumes:
+      - .:/code
+    links:
+      - db
+      - rabbitmq
+    depends_on:
       - rabbitmq

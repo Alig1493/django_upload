@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from django.conf import settings
 from django.core.files import File
+from django.core.files.storage import default_storage
 
 from upload.models import FileDownload
 
@@ -18,7 +19,8 @@ def match_strings(d, string):
 
 
 def process_file(input_file_path):
-    # input_file_path = f"{settings.MEDIA_ROOT}/uploads/U2-master_knitting_plan-8th_Feb_uBJbqqP.xlsx"
+    # input_file_path = f"{}/uploads/U2-master_knitting_plan-8th_Feb_uBJbqqP.xlsx"
+    input_file_path = input_file_path.file_field.name
 
     file_save_path = f"{settings.MEDIA_ROOT}/downloads"
 
@@ -30,11 +32,11 @@ def process_file(input_file_path):
 
     final_paths = [os.path.join(file_save_path, names) for names in file_names]
 
-    excel_file = pd.ExcelFile(input_file_path)
+    excel_file = pd.ExcelFile(default_storage.open(input_file_path))
 
     if "Auto plan . (2)" in excel_file.sheet_names or "semi-auto plan ." in excel_file.sheet_names:
-        df1 = pd.read_excel(input_file_path, sheet_name="Auto plan . (2)", header=None)
-        df2 = pd.read_excel(input_file_path, sheet_name="semi-auto plan .", header=None)
+        df1 = pd.read_excel(default_storage.open(input_file_path), sheet_name="Auto plan . (2)", header=None)
+        df2 = pd.read_excel(default_storage.open(input_file_path), sheet_name="semi-auto plan .", header=None)
         d1 = df1.to_dict()
         d2 = df2.to_dict()
         mylist_of_tuples1 = match_strings(d1, "Target")
@@ -144,7 +146,7 @@ def process_file(input_file_path):
             os.remove(final_paths[i])
 
     else:
-        df = pd.read_excel(input_file_path, sheet_name="M PLAN ", header=None)
+        df = pd.read_excel(default_storage.open(input_file_path), sheet_name="M PLAN ", header=None)
         d = df.to_dict()
         mylist_of_tuples = match_strings(d, "Target")
         df_out = pd.DataFrame()

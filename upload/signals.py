@@ -8,5 +8,6 @@ from upload.sq_projected_cap_scraper import process_file
 @receiver(post_save, sender=File)
 def post_save_input_file(sender, instance, **kwargs):
     if instance.id:
-        print(instance.file_field.path)
-        process_file(input_file_path=instance.file_field.path)
+        print(instance)
+        print(instance.file_field.name)
+        process_file(input_file_path=instance)

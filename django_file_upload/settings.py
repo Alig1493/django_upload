@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+
+import dj_database_url
+from decouple import config, Csv
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from google.oauth2 import service_account
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -26,7 +31,8 @@ SECRET_KEY = '^8sg7bzv^iyvhr3+u&d@7&frskh1lw%4g6c-r1i=*3b2f_f@c8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS',
+                       default='localhost', cast=Csv())
 
 
 # Application definition
@@ -101,21 +107,29 @@ WSGI_APPLICATION = 'django_file_upload.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
+DEFAULT_DATABASE = config('DATABASE_URL',
+                          default='postgres://postgres:root@localhost:5432/postgres',
+                          cast=dj_database_url.parse)
 
-    'default': {
-        'NAME': 'sq_uploads',
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    },
+DATABASES = {
+    'default': DEFAULT_DATABASE
 }
+
+# DATABASES = {
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.sqlite3',
+#     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     # }
+#
+#     'default': {
+#         'NAME': 'sq_uploads',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'USER': 'postgres',
+#         'PASSWORD': 'root',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     },
+# }
 
 
 # Password validation
@@ -159,3 +173,25 @@ MEDIA_URL = '/files/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_files")
+
+STORAGE_CREDENTIALS = ""
+
+if os.path.isfile("service-account-key.json"):
+    print("Found file")
+    STORAGE_CREDENTIALS = "service-account-key.json"
+
+if STORAGE_CREDENTIALS:
+    print("With GS Credentials")
+    GS_BUCKET_NAME = 'sq-django-uploads'
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        STORAGE_CREDENTIALS
+    )
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'upload.custom_storages.StaticStorage'
+
+    MEDIAFILES_LOCATION = 'media'
+    DEFAULT_FILE_STORAGE = 'upload.custom_storages.MediaStorage'
+
+else:
+    print("No GS Credentials")
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'

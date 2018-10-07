@@ -10,7 +10,3 @@ RUN chmod -R 777 ../media/
 
 COPY . /app
 RUN ./manage.py collectstatic --no-input
-
-RUN useradd django_upload
-RUN chown -R django_upload /app
-USER django_upload

@@ -1,19 +1,25 @@
 version: '3'
 
 services:
-  web:
+  worker: &worker
     build: .
     volumes:
       - ./media:/media
       - .:/app
     depends_on:
       - db
+      - redis
     environment:
       # Django settings overrides:
       - ALLOWED_HOSTS=*
       - DEBUG=True
       - DATABASE_URL=postgres://upload:upload@db:5432/upload_database
       - REDIS_URL=redis://redis:6379
+
+    command: celery -A django_file_upload worker -l info
+
+  web:
+    <<: *worker
 
     command: >
       bash -c "urlwait &&
@@ -32,6 +38,9 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - db:/var/lib/postgresql/data/pgdata
+
+  redis:
+    image: redis:latest
 
 volumes:
     db:

@@ -20,7 +20,7 @@ def match_strings(d, string):
 
 def process_file(input_file_path):
     # input_file_path = f"{}/uploads/U2-master_knitting_plan-8th_Feb_uBJbqqP.xlsx"
-    input_file_path = input_file_path.file_field.name
+    # input_file_path = input_file_path.file_field.name
 
     file_save_path = f"{settings.MEDIA_ROOT}/downloads"
 

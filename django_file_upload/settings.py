@@ -164,6 +164,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Celery settings
+CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

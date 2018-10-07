@@ -1,9 +1,12 @@
 version: '3'
 services:
 
-  web:
+  worker: &worker
     environment:
       - DEBUG=False
+
+  web:
+    <<: *worker
     command: >
       bash -c "bin/run-prod.sh"
     ports:

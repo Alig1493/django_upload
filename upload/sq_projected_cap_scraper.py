@@ -152,45 +152,25 @@ def process_file(input_file_path):
         df_out = pd.DataFrame()
 
         for i in range(len(mylist_of_tuples)):
-            df_first_col = df[0]
-            df_first_col_slice = df_first_col.iloc[df_first_col[df_first_col == "Month"].index[0]:]
-            df_first_col_slice.dropna(inplace=True)
-            prod_month_list = list(set(df_first_col_slice[1:]))
-            machine_days_list = []
-            pcs_list = []
-            sah_list = []
-
-            for month in prod_month_list:
-                df_month = df[df[0] == month]
-                df_month = df_month.fillna(0)
-                machine_days_list.append(sum(df_month[mylist_of_tuples[i][1] - 1]))
-                pcs_list.append(sum(df_month[mylist_of_tuples[i][1] + 1]))
-                sah_list.append(sum(df_month[mylist_of_tuples[i][1] + 3]))
-
-            if i < len(mylist_of_tuples) - 1 and mylist_of_tuples[i + 1][1] - mylist_of_tuples[i][1] >= 6:
+            prod_month_list = [df.iloc[mylist_of_tuples[0][0]+j, mylist_of_tuples[0][1]-1] for j in range(-18, -6)]
+            if i < len(mylist_of_tuples)-1 and mylist_of_tuples[i+1][1] - mylist_of_tuples[i][1] >= 6:
                 df_temp = {'Prod Month': prod_month_list,
-                           'Buyer': [df.iloc[mylist_of_tuples[i][0] - 2, mylist_of_tuples[i][1] - 1] for j in
-                                     range(len(prod_month_list))],
-                           'Style': [df.iloc[mylist_of_tuples[i][0] - 1, mylist_of_tuples[i][1] - 1] for j in
-                                     range(len(prod_month_list))],
-                           'Machine Type': [df.iloc[mylist_of_tuples[i][0] - 5, mylist_of_tuples[i][1] - 1] for j in
-                                            range(len(prod_month_list))],
-                           'Machine Days': machine_days_list,
-                           'Pcs': pcs_list,
-                           'SAH': sah_list}
+                           'Buyer': [df.iloc[mylist_of_tuples[i][0]-2, mylist_of_tuples[i][1]-1] for j in range(12)],
+                           'Style': [df.iloc[mylist_of_tuples[i][0]-1, mylist_of_tuples[i][1]-1] for j in range(12)],
+                           'Machine Type': [df.iloc[mylist_of_tuples[i][0]-5, mylist_of_tuples[i][1]-1] for j in range(12)],
+                           'Machine Days': [df.iloc[mylist_of_tuples[i][0]+j, mylist_of_tuples[i][1]+4] for j in range(-18, -6)],
+                           'Pcs': [df.iloc[mylist_of_tuples[i][0]+j, mylist_of_tuples[i][1]] for j in range(-18, -6)],
+                           'SAH': [df.iloc[mylist_of_tuples[i][0]+j, mylist_of_tuples[i][1]+2] for j in range(-18, -6)]}
                 df_temp = pd.DataFrame(df_temp)
                 df_out = pd.concat([df_out, df_temp], axis=0)
 
         df_temp = {'Prod Month': prod_month_list,
-                   'Buyer': [df.iloc[mylist_of_tuples[-1][0] - 2, mylist_of_tuples[-1][1] - 1] for j in
-                             range(len(prod_month_list))],
-                   'Style': [df.iloc[mylist_of_tuples[-1][0] - 1, mylist_of_tuples[-1][1] - 1] for j in
-                             range(len(prod_month_list))],
-                   'Machine Type': [df.iloc[mylist_of_tuples[-1][0] - 5, mylist_of_tuples[-1][1] - 1] for j in
-                                    range(len(prod_month_list))],
-                   'Machine Days': machine_days_list,
-                   'Pcs': pcs_list,
-                   'SAH': sah_list}
+                   'Buyer': [df.iloc[mylist_of_tuples[-1][0]-2, mylist_of_tuples[-1][1]-1] for j in range(12)],
+                   'Style': [df.iloc[mylist_of_tuples[-1][0]-1, mylist_of_tuples[-1][1]-1] for j in range(12)],
+                   'Machine Type': [df.iloc[mylist_of_tuples[-1][0]-5, mylist_of_tuples[-1][1]-1] for j in range(12)],
+                   'Machine Days': [df.iloc[mylist_of_tuples[-1][0]+j, mylist_of_tuples[-1][1]+4] for j in range(-18, -6)],
+                   'Pcs': [df.iloc[mylist_of_tuples[-1][0]+j, mylist_of_tuples[-1][1]] for j in range(-18, -6)],
+                   'SAH': [df.iloc[mylist_of_tuples[-1][0]+j, mylist_of_tuples[-1][1]+2] for j in range(-18, -6)]}
 
         df_temp = pd.DataFrame(df_temp)
         df_out = pd.concat([df_out, df_temp], axis=0)

@@ -1,0 +1,10 @@
+version: '3'
+services:
+
+  web:
+    environment:
+      - DEBUG=False
+    command: >
+      bash -c "bin/run-prod.sh"
+    ports:
+      - "8000:8000"

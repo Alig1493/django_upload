@@ -1,22 +1,6 @@
 version: '3'
 
 services:
-#  worker: &worker
-#    build: .
-#    volumes:
-#      - ./media:/media
-#      - .:/app
-#    depends_on:
-#      - db
-##      - redis
-#    environment:
-#      # Django settings overrides:
-#      - ALLOWED_HOSTS=*
-#      - DEBUG=True
-#      - DATABASE_URL=postgres://upload:upload@db:5432/upload_database
-#      # - REDIS_URL=redis://redis:6379
-#
-#    # command: celery -A upload worker -l info --concurrency=2 --beat
   web:
     build: .
     volumes:
@@ -29,7 +13,8 @@ services:
       - ALLOWED_HOSTS=*
       - DEBUG=True
       - DATABASE_URL=postgres://upload:upload@db:5432/upload_database
-  
+      - REDIS_URL=redis://redis:6379
+
     command: >
       bash -c "urlwait &&
                ./manage.py migrate &&
@@ -47,9 +32,6 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - db:/var/lib/postgresql/data/pgdata
-
-#  redis:
-#    image: redis:latest
 
 volumes:
     db:

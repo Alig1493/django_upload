@@ -190,15 +190,11 @@ if os.path.isfile(RELATIVE_FILE_PATH):
         RELATIVE_FILE_PATH
     )
     STATICFILES_LOCATION = 'static'
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_STORAGE = 'django_file_upload.custom_storages.StaticStorage'
 
     MEDIAFILES_LOCATION = 'media'
-    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+    DEFAULT_FILE_STORAGE = 'django_file_upload.custom_storages.MediaStorage'
 
 else:
     print("No GS Credentials")
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static_files"),
-]

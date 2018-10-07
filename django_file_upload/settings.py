@@ -174,24 +174,31 @@ MEDIA_URL = '/files/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_files")
 
-STORAGE_CREDENTIALS = ""
+RELATIVE_FILE_PATH = "service-account-key.json"
 
-if os.path.isfile("service-account-key.json"):
+print(os.path.isfile(RELATIVE_FILE_PATH))
+
+if os.path.isfile(RELATIVE_FILE_PATH):
     print("Found file")
-    STORAGE_CREDENTIALS = "service-account-key.json"
+    with open(RELATIVE_FILE_PATH, "r") as f:
+        print(f.read())
 
-if STORAGE_CREDENTIALS:
+if os.path.isfile(RELATIVE_FILE_PATH):
     print("With GS Credentials")
     GS_BUCKET_NAME = 'sq-django-uploads'
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-        STORAGE_CREDENTIALS
+        RELATIVE_FILE_PATH
     )
     STATICFILES_LOCATION = 'static'
-    STATICFILES_STORAGE = 'upload.custom_storages.StaticStorage'
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 
     MEDIAFILES_LOCATION = 'media'
-    DEFAULT_FILE_STORAGE = 'upload.custom_storages.MediaStorage'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
 else:
     print("No GS Credentials")
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static_files"),
+]

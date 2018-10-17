@@ -28,3 +28,4 @@ class FileListView(LoginRequiredMixin, ListView):
     queryset = FileDownload.objects.order_by('-id')
     context_object_name = "files"
     template_name = "upload/file_list.jinja2"
+    login_url = 'auth:login'

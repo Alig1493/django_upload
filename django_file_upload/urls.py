@@ -20,7 +20,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('upload.urls', namespace='files')),
+    path('file/', include('django_file_upload.upload.urls', namespace='files')),
+    path('', include('django_file_upload.users.urls', namespace='auth')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

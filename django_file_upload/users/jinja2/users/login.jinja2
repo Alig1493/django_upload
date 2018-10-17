@@ -1,0 +1,47 @@
+{% extends "users/base.jinja2" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-center container w-100">
+        <div class="row w-75 justify-content-center container-fluid">
+             <div class="card mt-5 login-card w-50">
+                <div class="card-header">
+                    <p class="text-center font-weight-bold h2">LOGIN</p>
+                </div>
+                <div class="card-body">
+                    {% if form.errors %}
+                        <p class="text-danger text-center">Your username and password didn't match. Please try again.</p>
+                    {% endif %}
+                    {% if next %}
+                        {% if user.is_authenticated %}
+                            <p>Your account doesn't have access to this page. To proceed,
+                                please login with an account that has access.</p>
+                        {% else %}
+                            <p>Please login to see this page.</p>
+                        {% endif %}
+                    {% endif %}
+                    <form method="post" action="{{ url('auth:login') }}" class="form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ form.username.label_tag() }}</label>
+                            {{ form.username }}
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your username
+                                with anyone else.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">{{ form.password.label_tag() }}</label>
+                            {{ form.password }}
+                        </div>
+                        <button type="submit" value="login" class="btn btn-block btn-info">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

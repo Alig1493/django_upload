@@ -14,12 +14,14 @@ import os
 
 import dj_database_url
 from decouple import config, Csv
+from django.urls import reverse_lazy
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from google.oauth2 import service_account
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HOME_DIR = os.path.realpath(os.path.join(BASE_DIR, '..'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -44,11 +46,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
-    'upload',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'django_file_upload.upload',
+    'django_file_upload.core',
+    'django_file_upload.capacity',
+    'django_file_upload.confirmation',
+    'django_file_upload.users',
 
     'django_jinja',
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -173,6 +185,8 @@ CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379')
 STATIC_URL = '/static/'
 MEDIA_URL = '/files/'
 
+MEDIA_DIR = os.path.realpath(os.path.join(HOME_DIR, 'media/'))
+
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_files")
 
@@ -200,3 +214,6 @@ if os.path.isfile(RELATIVE_FILE_PATH):
 else:
     print("No GS Credentials")
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+LOGIN_REDIRECT_URL = reverse_lazy('auth:dashboard')
+AUTH_USER_MODEL = 'users.User'

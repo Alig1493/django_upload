@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            SQ
+        {% endblock title %}
+    </title>
+    <link rel="stylesheet" href="{{ static('upload/css/bootstrap.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ static('upload/css/bootstrap-grid.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ static('upload/css/bootstrap-reboot.css') }}" type="text/css">
+
+</head>
+<body>
+
+    {% block content %}
+        <p>{{ user.email }}</p>
+        <p><a href="{{ url('auth:logout') }}">Logout</a></p>
+    {% endblock content %}
+
+    {% block javascript %}
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+        <script src="{{ static('upload/js/bootstrap.bundle.js') }}"></script>
+        <script src="{{ static('upload/js/bootstrap.js') }}"></script>
+    {% endblock %}
+
+</body>
+</html>

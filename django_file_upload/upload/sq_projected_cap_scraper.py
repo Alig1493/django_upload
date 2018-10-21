@@ -4,6 +4,8 @@ import pandas as pd
 from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import default_storage
+from django.utils.dateparse import parse_date
+from django.utils.datetime_safe import datetime
 
 from .models import FileDownload
 
@@ -18,7 +20,7 @@ def match_strings(d, string):
     return mylist
 
 
-def process_file(input_file_path):
+def process_file(input_file_path, input_file_date):
     # input_file_path = f"{}/uploads/U2-master_knitting_plan-8th_Feb_uBJbqqP.xlsx"
     # input_file_path = input_file_path.file_field.name
 
@@ -181,6 +183,7 @@ def process_file(input_file_path):
 
         with open(final_paths[2], 'rb') as f:
             output_file = FileDownload()
+            output_file.date = datetime.strptime(input_file_date, "%Y-%m-%dT%H:%M:%S").date()
             output_file.file_field.save(name=file_names[2], content=File(f))
 
         os.remove(final_paths[2])

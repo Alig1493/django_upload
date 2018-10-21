@@ -29,6 +29,7 @@ def downloads_directory_path(instance, filename):
 class File(models.Model):
     """This holds a single user uploaded file"""
     file_field = models.FileField(upload_to="uploads/")
+    date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
@@ -41,6 +42,7 @@ class File(models.Model):
 class FileDownload(models.Model):
     """This holds a single user uploaded file"""
     file_field = models.FileField(upload_to="downloads/")
+    date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):

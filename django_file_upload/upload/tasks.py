@@ -7,7 +7,7 @@ from .sq_projected_cap_scraper import process_file
 
 
 @app.task(bind=True)
-def run_file_upload_tasks(self, file_name):
+def run_file_upload_tasks(self, file_name, file_date):
     print("File tasks in progress.")
-    process_file(input_file_path=file_name)
+    process_file(input_file_path=file_name, input_file_date=file_date)
     print("File tasks processing completed.")

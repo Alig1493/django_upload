@@ -14,6 +14,9 @@
     <form id="upload-form" action="#" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="input-group mb-3">
+            <input type="date" id="{{ form.date.auto_id }}" name="{{ form.date.html_name }}"
+                   value="{{ form.date.value()}}">
+{#            {{ form.date }}#}
             <div class="custom-file">
                 {{ form.file_field }}
                 <label class="custom-file-label" for="inputGroupFile02">

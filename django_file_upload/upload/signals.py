@@ -10,4 +10,4 @@ def post_save_input_file(sender, instance, **kwargs):
     if instance.id:
         print(instance)
         print(instance.file_field.name)
-        run_file_upload_tasks.delay(file_name=instance.file_field.name)
+        run_file_upload_tasks.delay(file_name=instance.file_field.name, file_date=instance.date)

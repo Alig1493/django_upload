@@ -29,6 +29,12 @@ class SAH(UnitSessionTimeStampModel):
     projections = models.FloatField(blank=True, null=True)
     open = models.FloatField(blank=True, null=True)
     budget_v_plan = models.FloatField(blank=True, null=True, verbose_name="Budget Vs Plan")
+    budget_epm = models.FloatField(blank=True, null=True)
+    confirmed_epm = models.FloatField(blank=True, null=True)
+    budget_fob = models.FloatField(blank=True, null=True)
+    confirmed_fob = models.FloatField(blank=True, null=True)
+    budget_va = models.FloatField(blank=True, null=True)
+    confirmed_va = models.FloatField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Capacity (SAH)"

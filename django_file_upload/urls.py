@@ -18,6 +18,24 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Projected Capacity API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   validators=['flex', 'ssv'],
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+
 api_patterns = (
     [
         path('capacity/', include('django_file_upload.capacity.urls', namespace='capacity')),
@@ -29,6 +47,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('file/', include('django_file_upload.upload.urls', namespace='files')),
     path('api/', include(api_patterns, namespace='api')),
+    path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('', include('django_file_upload.users.urls', namespace='auth')),
 ]
 

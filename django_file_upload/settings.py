@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'django_file_upload.users',
 
     'django_jinja',
+    'drf_yasg'
 ]
 SITE_ID = 1
 

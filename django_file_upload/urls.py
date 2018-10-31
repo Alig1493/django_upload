@@ -18,9 +18,17 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+api_patterns = (
+    [
+        path('capacity/', include('django_file_upload.capacity.urls', namespace='capacity')),
+        path('confirmation/', include('django_file_upload.confirmation.urls', namespace='confirmation')),
+    ], "api_patterns"
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('file/', include('django_file_upload.upload.urls', namespace='files')),
+    path('api/', include(api_patterns, namespace='api')),
     path('', include('django_file_upload.users.urls', namespace='auth')),
 ]
 

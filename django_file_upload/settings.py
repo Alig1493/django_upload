@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
+    'rest_framework',
+
     'django_file_upload.upload',
     'django_file_upload.core',
     'django_file_upload.capacity',

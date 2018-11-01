@@ -10,5 +10,3 @@ class BuyerWiseSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyerWise
         exclude = []
-
-

@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 
 import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 from decouple import config, Csv
 from django.urls import reverse_lazy
 from django_jinja.builtins import DEFAULT_EXTENSIONS
@@ -61,7 +64,8 @@ INSTALLED_APPS = [
     'django_file_upload.users',
 
     'django_jinja',
-    'drf_yasg'
+    'drf_yasg',
+    'raven.contrib.django.raven_compat',
 ]
 SITE_ID = 1
 
@@ -221,3 +225,7 @@ else:
 
 LOGIN_REDIRECT_URL = reverse_lazy('auth:dashboard')
 AUTH_USER_MODEL = 'users.User'
+
+RAVEN_CONFIG = {
+    'dsn': config('SENTRY_DSN_URL', default=None),
+}

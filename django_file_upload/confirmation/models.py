@@ -2,7 +2,7 @@ from django.db import models
 
 from django_file_upload.core.models import UnitSessionTimeStampModel
 
-
+# TODO: In addition to UnitSessionTimeStampModel fields, BuyerWise will now have only three more fields-- buyer, confirmed, total. The total needs to be calculated from backend. You'll have to update your frontend template as well to conform to these mentioned changes.
 class BuyerWise(UnitSessionTimeStampModel):
     hnm = models.FloatField(blank=True, null=True, verbose_name="H&M")
     esprit = models.FloatField(blank=True, null=True, verbose_name="ESPRIT")

@@ -15,9 +15,13 @@ def get_model_fields(unit, **kwargs):
         preserved = Case(*[When(session=session, then=pos) for pos, session in enumerate(kwargs['session__in'])])
         data[model] = (model.objects.filter(unit=unit, **kwargs)
                        .order_by(preserved)
+                       .order_by("-created_at")
+                       .order_by("session")
+                       .distinct("session")
                        # .order_by('session', '-created_at')
                        # .distinct('session')
                        )
+        print(data[model])
     return data
 
 

@@ -12,7 +12,6 @@ class CommonAdmin(admin.ModelAdmin):
         exclude_fields = ADMIN_EXCLUDE_FIELDS
         include_fields = [f.name for f in self.model._meta.get_fields() if f.name not in exclude_fields]
         include_fields.append("created_at")
-        print(include_fields)
         return include_fields
 
 

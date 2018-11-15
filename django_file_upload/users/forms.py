@@ -48,4 +48,4 @@ class CustomAuthForm(AuthenticationForm):
 
 class YearForm(forms.Form):
 
-    year = forms.ChoiceField(choices=[(year, year) for year in range(1990, datetime.datetime.now().year + 1)])
+    year = forms.ChoiceField(choices=[(year, year) for year in range(1990, datetime.datetime.now().year + 10)])

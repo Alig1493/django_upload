@@ -42,6 +42,7 @@ class DashboardView(LoginRequiredMixin, TemplateView, ProcessFormView):
 
     def get_current_year(self, **kwargs):
         year = kwargs.get("year")
+        print("YEar: ", year)
         if year:
             return year
         return self.get_current_date.year
@@ -50,19 +51,16 @@ class DashboardView(LoginRequiredMixin, TemplateView, ProcessFormView):
         return YearForm(initial={'year': self.get_current_year(**kwargs)})
 
     def get_session_list(self, **kwargs):
-        year = self.get_current_year(**kwargs)
-        months = self.get_current_date.month
-        if int(year) > self.get_current_date.year:
-            months = 0
-        elif int(year) < self.get_current_date.year:
-            months = 12
+        months = 12
         session_list = []
         for month in range(1, months+1):
+            print("Creating session list")
             session_list.append(month)
             if month % 3 == 0:
                 session_list.append(12+int(month/3))
             if month % 6 == 0:
                 session_list.append(16+int(month/6))
+        print("Session list", session_list)
         return session_list
 
     def get_context_data(self, **kwargs):

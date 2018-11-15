@@ -9,7 +9,9 @@ import pandas as pd
 # from django.utils.datetime_safe import datetime
 
 # from .models import FileDownload
-from payload_generator import PayloadGenerator, \
+from django_file_upload.capacity.models import MachineDay, SAH, Pcs, GGPcs
+from django_file_upload.upload.utils import insert_data
+from .payload_generator import PayloadGenerator, \
     ConfirmedPayloadGenerator, BudgetPayloadGenerator, \
     ReservationsPayloadGenerator, ProjectionsPayloadGenerator
 
@@ -110,15 +112,25 @@ def process_file(input_file_path, input_file_date):
 
 # TODO: add these payload data to your django db and to our analytics endpoints
 # TODO: the buyerwise model needs to be changed as discussed (see note django_file_upload/confirmation/models.py)
-    machine_day_payload = \
-        payload_generator.generate_final_payload(machine_day_dataframes_list)
-    sah_payload = \
-        payload_generator.generate_final_payload(sah_dataframes_list)
-    pcs_payload = \
-        payload_generator.generate_final_payload(pcs_dataframes_list)
-    gg_pcs_payload = \
-        payload_generator.generate_final_payload(gg_pcs_dataframes_list)
+    machine_day_payload = payload_generator.generate_final_payload(machine_day_dataframes_list)
+    # print("Machine day payload: ", machine_day_payload)
+    insert_data(MachineDay, machine_day_payload)
+    # print("===========================================")
+    sah_payload = payload_generator.generate_final_payload(sah_dataframes_list)
+    # print("SAH payload: ", sah_payload)
+    insert_data(SAH, sah_payload)
+    # print("===========================================")
+    pcs_payload = payload_generator.generate_final_payload(pcs_dataframes_list)
+    # print("PCS Payload", pcs_payload)
+    insert_data(Pcs, pcs_payload)
+    # print("===========================================")
+    gg_pcs_payload = payload_generator.generate_final_payload(gg_pcs_dataframes_list)
+    # print("GG pcs payload: ", gg_pcs_payload)
+    insert_data(GGPcs, gg_pcs_payload)
+    # print("===========================================")
     buyer_wise_payload = pcs_confirmed_buyer
+    # print(type(buyer_wise_payload))
+    # print("Buyer wise: ", buyer_wise_payload.to_dict(orient='records'))
 
 # TODO: Not sure whether any files are being stored on each upload. If stored, then delete the file at the end.
 

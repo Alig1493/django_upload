@@ -18,7 +18,6 @@ class PayloadGenerator:
         self.header = header
         self.skiprows = skiprows
         self.df_rawdata = \
-            # pd.read_excel(input_file_path,
             pd.read_excel(default_storage.open(input_file_path),
                           sheet_name=sheet_name, header=header,
                           skiprows=skiprows)

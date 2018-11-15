@@ -54,13 +54,11 @@ class DashboardView(LoginRequiredMixin, TemplateView, ProcessFormView):
         months = 12
         session_list = []
         for month in range(1, months+1):
-            print("Creating session list")
             session_list.append(month)
             if month % 3 == 0:
                 session_list.append(12+int(month/3))
             if month % 6 == 0:
                 session_list.append(16+int(month/6))
-        print("Session list", session_list)
         return session_list
 
     def get_context_data(self, **kwargs):

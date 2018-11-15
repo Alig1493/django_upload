@@ -21,9 +21,6 @@ def get_model_fields(unit, **kwargs):
                        # .order_by('session', '-created_at')
                        # .distinct('session')
                        )
-        print("KWARGS: ", kwargs)
-        print(data[model])
-        print(model.objects.filter(**kwargs))
     return data
 
 

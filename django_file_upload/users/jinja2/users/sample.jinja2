@@ -81,8 +81,12 @@
                                                             <th scope="row">
                                                                 {{ field.verbose_name|title }}
                                                             </th>
-                                                            {% for row_data in item[1] %}
-                                                                <td class={{ get_session_class(get_field_value(row_data, "session")) }}>{{ get_field_value(row_data, field.name) }}</td>
+                                                            {% for session in sessions %}
+                                                                {% for row_data in item[1] %}
+                                                                    {% if row_data.session == session %}
+                                                                        <td class={{ get_session_class(session) }}>{{ get_field_value(row_data, field.name) }}</td>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             {% endfor %}
                                                         {% endif %}
                                                     </tr>

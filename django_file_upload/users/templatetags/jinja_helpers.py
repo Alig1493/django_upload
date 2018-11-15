@@ -1,7 +1,7 @@
 from django_jinja import library
 
 from django_file_upload.capacity.models import SAH
-from django_file_upload.core.config import EXCLUDE_FIELDS, Session
+from django_file_upload.core.config import EXCLUDE_FIELDS, Session, UnitType
 
 
 @library.global_function
@@ -13,7 +13,7 @@ def get_model_name(value):
 def get_field_value(data, field):
 
     value = getattr(data, field)
-    if type(data) == SAH and field == "budget":
+    if type(data) == SAH and field == "budget" and data.unit == UnitType.AUTO:
         print("Data: ", data)
         print("Field: ", field)
         print("Value: ", value)

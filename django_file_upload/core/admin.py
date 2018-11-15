@@ -11,7 +11,9 @@ class CommonAdmin(admin.ModelAdmin):
     def get_list_display(self, request):
         exclude_fields = ADMIN_EXCLUDE_FIELDS
         include_fields = [f.name for f in self.model._meta.get_fields() if f.name not in exclude_fields]
-        return include_fields + ["created_at"]
+        include_fields.append("created_at")
+        print(include_fields)
+        return include_fields
 
 
 admin.site.unregister(EmailAddress)

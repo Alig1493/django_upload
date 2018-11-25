@@ -1,12 +1,12 @@
 from django.db.models import Case, When
 
 from django_file_upload.capacity.models import MachineDay, SAH, Pcs, GGPcs
-from django_file_upload.confirmation.models import BuyerWise
+from django_file_upload.confirmation.models import BuyerWiseCon
 from django_file_upload.core.config import UnitType
 
 
 def get_models():
-    return [MachineDay, SAH, Pcs, GGPcs, BuyerWise]
+    return [MachineDay, SAH, Pcs, GGPcs, BuyerWiseCon]
 
 
 def get_model_fields(unit, **kwargs):
@@ -21,6 +21,9 @@ def get_model_fields(unit, **kwargs):
                        # .order_by('session', '-created_at')
                        # .distinct('session')
                        )
+        if isinstance(model, BuyerWiseCon):
+            print("Inside data generation")
+            print(data)
     return data
 
 

@@ -10,7 +10,7 @@ import pandas as pd
 
 # from .models import FileDownload
 from django_file_upload.capacity.models import MachineDay, SAH, Pcs, GGPcs
-from django_file_upload.upload.utils import insert_data
+from django_file_upload.upload.utils import insert_data, insert_buyer_wise_data
 from .payload_generator import PayloadGenerator, \
     ConfirmedPayloadGenerator, BudgetPayloadGenerator, \
     ReservationsPayloadGenerator, ProjectionsPayloadGenerator
@@ -129,8 +129,11 @@ def process_file(input_file_path, input_file_date):
     insert_data(GGPcs, gg_pcs_payload)
     # print("===========================================")
     buyer_wise_payload = pcs_confirmed_buyer
+    buyer_wise_payload = buyer_wise_payload.to_dict(orient='records')
     # print(type(buyer_wise_payload))
-    # print("Buyer wise: ", buyer_wise_payload.to_dict(orient='records'))
+    print("Buyer wise: ", buyer_wise_payload)
+    insert_buyer_wise_data(buyer_wise_payload)
+
 
 # TODO: Not sure whether any files are being stored on each upload. If stored, then delete the file at the end.
 

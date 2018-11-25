@@ -1,6 +1,8 @@
+from django.db.models import QuerySet
 from django_jinja import library
 
 from django_file_upload.capacity.models import SAH
+from django_file_upload.confirmation.models import BuyerWiseCon
 from django_file_upload.core.config import EXCLUDE_FIELDS, Session, UnitType
 
 
@@ -33,3 +35,18 @@ def get_session_name(number):
 @library.global_function
 def get_session_class(number):
     return "m" if number <= 12 else "o"
+
+
+@library.global_function
+def is_buyerwise(data):
+    if isinstance(data, str):
+        return data == BuyerWiseCon._meta.model_name
+    return isinstance(data, BuyerWiseCon)
+
+
+@library.global_function
+def debugger(data):
+    print("Inside template debugger")
+    if isinstance(data, QuerySet):
+        print(data.model)
+    print(data)

@@ -75,22 +75,44 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for field in item[0]._meta.fields %}
-                                                    <tr>
-                                                        {% if allowed_field(field.name) %}
+                                                {% if is_buyerwise(item[0]._meta.model_name) %}
+                                                    {% for buyer in buyers %}
+                                                        <tr>
                                                             <th scope="row">
-                                                                {{ field.verbose_name|title }}
+                                                                {{ buyer.name|title }}
                                                             </th>
                                                             {% for session in sessions %}
-                                                                {% for row_data in item[1] %}
+                                                                {% for row_data in item[1].filter(buyer=buyer).values_list("confirmed", flat=True) %}
                                                                     {% if row_data.session == session %}
-                                                                        <td class={{ get_session_class(session) }}>{{ get_field_value(row_data, field.name) }}</td>
+                                                                        <td class={{ get_session_class(session) }}>{{ row_data }}</td>
                                                                     {% endif %}
                                                                 {% endfor %}
                                                             {% endfor %}
-                                                        {% endif %}
+                                                        </tr>
+                                                    {% endfor %}
+                                                    <tr>
+                                                        <th scope="row">
+                                                            {{ Total|title }}
+                                                        </th>
                                                     </tr>
-                                                {% endfor %}
+                                                {% else %}
+                                                    {% for field in item[0]._meta.fields %}
+                                                        <tr>
+                                                            {% if allowed_field(field.name) %}
+                                                                <th scope="row">
+                                                                    {{ field.verbose_name|title }}
+                                                                </th>
+                                                                {% for session in sessions %}
+                                                                    {% for row_data in item[1] %}
+                                                                        {% if row_data.session == session %}
+                                                                            <td class={{ get_session_class(session) }}>{{ get_field_value(row_data, field.name) }}</td>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </tr>
+                                                    {% endfor %}
+                                                {% endif %}
                                             </tbody>
                                         </table>
                                     </div>

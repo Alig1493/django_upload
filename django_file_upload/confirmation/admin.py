@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from django_file_upload.core.admin import CommonAdmin
-from .models import BuyerWise
+from .models import BuyerWiseCon
 
 
-admin.site.register(BuyerWise, CommonAdmin)
+admin.site.register(BuyerWiseCon, CommonAdmin)

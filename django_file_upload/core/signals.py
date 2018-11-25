@@ -2,11 +2,9 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from django_file_upload.capacity.models import SAH, MachineDay, Pcs, GGPcs
-from django_file_upload.confirmation.models import BuyerWise
 from django_file_upload.core.utils import chain_reaction
 
 
-@receiver(post_save, sender=BuyerWise)
 @receiver(post_save, sender=MachineDay)
 @receiver(post_save, sender=SAH)
 @receiver(post_save, sender=Pcs)

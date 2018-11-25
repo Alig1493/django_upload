@@ -4,6 +4,7 @@ from django.db.models.functions import datetime
 from django.utils.functional import cached_property
 from django.views.generic.edit import ProcessFormView
 
+from django_file_upload.confirmation.models import Buyer
 from django_file_upload.core.config import UnitType, Session
 from django_file_upload.users.utils import (get_unit_models, get_models)
 from .forms import CustomAuthForm, YearForm
@@ -70,6 +71,7 @@ class DashboardView(LoginRequiredMixin, TemplateView, ProcessFormView):
         context["sessions"] = session_list
         # Session.get_session_list(limit=self.get_session(year))
         context["unit_models"] = get_unit_models(session__in=session_list, year=self.get_current_year(**kwargs))
+        context["buyers"] = Buyer.objects.all().order_by("name")
         return context
 
     def post(self, request, *args, **kwargs):

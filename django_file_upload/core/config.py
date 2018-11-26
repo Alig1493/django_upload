@@ -59,6 +59,21 @@ class Session(object):
         return session_list + [(cls.Q1, "Q1"), (cls.Q2, "Q2"), (cls.Q3, "Q3"),
                                (cls.Q4, "Q4"), (cls.H1, "H1"), (cls.H2, "H2")]
 
+    @classmethod
+    def get_session_quarter(cls, session):
+
+        if session < 4:
+            return [cls.JAN, cls.FEB, cls.MAR]
+
+        elif session < 7:
+            return [cls.APR, cls.MAY, cls.JUN]
+
+        elif session < 10:
+            return [cls.JUL, cls.AUG, cls.SEP]
+
+        else:
+            return [cls.OCT, cls.NOV, cls.DEC]
+
 
 class UnitType(object):
 

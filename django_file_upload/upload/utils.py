@@ -23,11 +23,11 @@ def insert_buyer_wise_data(payload):
     for value in payload:
         buyer_name = value.pop("buyer")
         buyer, created = Buyer.objects.get_or_create(name=buyer_name)
-        print("Buyer name: ", buyer_name)
+        print("Buyer name: ", buyer)
         print("Buyer created: ", created)
-        buyer_wise_con = BuyerWiseCon.objects.create(buyer=buyer, **value)
-        buyer_chain_reaction(model=BuyerWiseCon,
-                             month=buyer_wise_con.session,
-                             year=buyer_wise_con.year,
-                             unit=buyer_wise_con.unit,
-                             buyer=buyer)
+        BuyerWiseCon.objects.create(buyer=buyer, **value)
+        # buyer_chain_reaction(model=BuyerWiseCon,
+        #                      month=buyer_wise_con.session,
+        #                      year=buyer_wise_con.year,
+        #                      unit=buyer_wise_con.unit,
+        #                      buyer=buyer)

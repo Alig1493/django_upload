@@ -79,20 +79,21 @@
                                                     {% for buyer in buyers %}
                                                         <tr>
                                                             <th scope="row">
-                                                                {{ buyer.name|title }}
+                                                                {{ buyer.name }}
                                                             </th>
                                                             {% for session in sessions %}
-                                                                {% for row_data in item[1].filter(buyer=buyer).values_list("confirmed", flat=True) %}
-                                                                    {% if row_data.session == session %}
-                                                                        <td class={{ get_session_class(session) }}>{{ row_data }}</td>
+                                                                {% set row_data = item[1].filter(buyer=buyer, session=session) %}
+                                                                <td class={{ get_session_class(session) }}>
+                                                                    {% if row_data %}
+                                                                        {{ row_data[0].confirmed }}
                                                                     {% endif %}
-                                                                {% endfor %}
+                                                                </td>
                                                             {% endfor %}
                                                         </tr>
                                                     {% endfor %}
                                                     <tr>
                                                         <th scope="row">
-                                                            {{ Total|title }}
+                                                            {{ "Total"|title }}
                                                         </th>
                                                     </tr>
                                                 {% else %}

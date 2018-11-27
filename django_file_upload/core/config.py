@@ -74,6 +74,15 @@ class Session(object):
         else:
             return [cls.OCT, cls.NOV, cls.DEC]
 
+    @classmethod
+    def get_session_half(cls, session):
+
+        if session < 7:
+            return [cls.JAN, cls.FEB, cls.MAR, cls.APR, cls.MAY, cls.JUN]
+
+        else:
+            return [cls.JUL, cls.AUG, cls.SEP, cls.OCT, cls.NOV, cls.DEC]
+
 
 class UnitType(object):
 

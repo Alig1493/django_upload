@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Sum
 from django.utils.functional import cached_property
 
+from django_file_upload.confirmation.utils import queryset_sum
 from django_file_upload.core.models import UnitSessionTimeStampModel
 
 
@@ -32,18 +33,15 @@ class BuyerWiseCon(UnitSessionTimeStampModel):
 
     @classmethod
     def month_total(cls, unit, session, year):
-        total = cls.objects.filter(unit=unit, session=session, year=year).aggregate(month_total=Sum("confirmed"))
-        return total["month_total"]
-
-    @classmethod
-    def unit_total(cls, unit, session_list, year, buyer):
-        total = (cls.objects.filter(unit=unit, buyer=buyer, session__in=session_list, year=year)
-                            .aggregate(unit_total=Sum("confirmed")))
-        return total["unit_total"]
+        queryset = (cls.objects.filter(unit=unit, session=session, year=year)
+                               .order_by("created_at")
+                               .order_by("buyer")
+                               .distinct("buyer"))
+        total = queryset_sum(queryset=queryset)
+        return total
 
 
 class BuyerWiseTotal(UnitSessionTimeStampModel):
-    buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name="buyerwise_total")
     total = models.FloatField(blank=True, null=True)
 
     def __str__(self):

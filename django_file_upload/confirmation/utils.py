@@ -19,16 +19,18 @@ def queryset_sum(queryset):
 def buyer_session_wise_calc(model, month, year, unit, buyer, session_length):
     session_division = get_session_division(month, session_length)
     session_months_list = list(range(1, session_length+1))
+    queryset = (model.objects.filter(year=year, unit=unit,
+                                     session__in=(
+                                         Session.get_session_quarter(session=month)
+                                         if session_length == 3 else
+                                         Session.get_session_half(session=month)
+                                     ),
+                                     buyer=buyer)
+                             .order_by('session', 'created_at')
+                             .distinct("session"))
 
-    session_total = queryset_sum(queryset=model.objects.filter(year=year, unit=unit,
-                                                               session__in=Session.get_session_quarter(session=month),
-                                                               buyer=buyer)
-                                                       .order_by('session', 'created_at')
-                                                       .distinct("session"))
-    print("Queryset: ", model.objects.filter(year=year, unit=unit,
-                                             session__in=Session.get_session_quarter(session=month), buyer=buyer)
-                                                       .order_by('session', 'created_at')
-                                                       .distinct("session"))
+    session_total = queryset_sum(queryset=queryset)
+    print("Queryset: ", queryset)
 
     session_base_number = Session.Q1 - 1 if session_length == 3 else Session.H1 - 1
     print("session month: ", month)
@@ -48,21 +50,24 @@ def buyer_session_wise_calc(model, month, year, unit, buyer, session_length):
     print("Session total value:", session_total)
 
     obj = model.objects.filter(**defaults)
-    if not obj.count():
-        print("Nothing exists. Creating new entry for ", defaults)
-        return model.objects.create(confirmed=session_total, **defaults)
-    return obj.update(confirmed=session_total)
+    session_obj = None
+
+    if defaults["session"] <= 18:
+        if not obj.count():
+            print("Nothing exists. Creating new entry for ", defaults)
+            session_obj = model.objects.create(confirmed=session_total, **defaults)
+        else:
+            session_obj = obj.update(confirmed=session_total)
+    return session_obj
 
 
 def buyer_calc_monthly_total(model, month, year, buyer):
-    monthly_total = queryset_sum(queryset=model.objects.filter(buyer=buyer, session=month,
-                                                               year=year, unit__in=[UnitType.AUTO, UnitType.SEMI])
-                                                       .order_by('unit', 'created_at')
-                                                       .distinct("unit"))
-    print("Queryset: ", model.objects.filter(buyer=buyer, session=month,
-                                                               year=year, unit__in=[UnitType.AUTO, UnitType.SEMI])
-                                                       .order_by('unit', 'created_at')
-                                                       .distinct("unit"))
+    queryset = (model.objects.filter(buyer=buyer, session=month,
+                                     year=year, unit__in=[UnitType.AUTO, UnitType.SEMI])
+                             .order_by('unit', 'created_at')
+                             .distinct("unit"))
+    monthly_total = queryset_sum(queryset=queryset)
+    print("Queryset: ", queryset)
 
     defaults = {
         "year": year,

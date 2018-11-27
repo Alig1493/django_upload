@@ -95,6 +95,15 @@
                                                         <th scope="row">
                                                             {{ "Total"|title }}
                                                         </th>
+                                                            {% for session in sessions %}
+                                                                <td>
+                                                                    {% set row_data = buyer_session_totals.filter(unit=tabs[0], session=session) %}
+                                                                    {% if row_data %}
+                                                                        {{ row_data[0].total }}
+                                                                    {% endif %}
+    {#                                                                {{ tabs }}#}
+                                                                </td>
+                                                            {% endfor %}
                                                     </tr>
                                                 {% else %}
                                                     {% for field in item[0]._meta.fields %}

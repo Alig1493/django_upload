@@ -21,6 +21,7 @@ def buyer_wise_calc(sender, instance, **kwargs):
     BuyerWiseTotal.objects.update_or_create(total=total_value, session=instance.session,
                                             year=instance.year, defaults=defaults)
 
-    buyer_chain_reaction(model=sender, month=instance.session,
-                         year=instance.year, unit=instance.unit,
-                         buyer=instance.buyer)
+    if instance.session <= 12:
+        buyer_chain_reaction(model=sender, month=instance.session,
+                             year=instance.year, unit=instance.unit,
+                             buyer=instance.buyer)

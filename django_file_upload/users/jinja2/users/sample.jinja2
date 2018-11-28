@@ -99,7 +99,9 @@
                                                                 <td>
                                                                     {% set row_data = buyer_session_totals.filter(unit=tabs[0], session=session) %}
                                                                     {% if row_data %}
+{#                                                                        {{ row_data[0].session }}#}
                                                                         {{ row_data[0].total }}
+{#                                                                        {{ row_data[0].unit }}#}
                                                                     {% endif %}
     {#                                                                {{ tabs }}#}
                                                                 </td>

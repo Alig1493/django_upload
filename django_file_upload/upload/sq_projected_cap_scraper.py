@@ -131,7 +131,7 @@ def process_file(input_file_path, input_file_date):
     buyer_wise_payload = pcs_confirmed_buyer
     buyer_wise_payload = buyer_wise_payload.to_dict(orient='records')
     # print(type(buyer_wise_payload))
-    print("Buyer wise: ", buyer_wise_payload)
+    # print("Buyer wise: ", buyer_wise_payload)
     insert_buyer_wise_data(buyer_wise_payload)
 
 

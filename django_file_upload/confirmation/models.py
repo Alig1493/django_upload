@@ -33,11 +33,16 @@ class BuyerWiseCon(UnitSessionTimeStampModel):
 
     @classmethod
     def month_total(cls, unit, session, year):
+        print("Unit: ", unit)
         queryset = (cls.objects.filter(unit=unit, session=session, year=year)
-                               .order_by("created_at")
-                               .order_by("buyer")
-                               .distinct("buyer"))
+                               .order_by("created_at"))
         total = queryset_sum(queryset=queryset)
+
+        if unit == 0 and session == 2 and year == 2018:
+            print("Showing total results for semi auto february 2018")
+            print("Queryset: ", queryset.values_list("confirmed", flat=True))
+            print("Total sum: ", total)
+
         return total
 
 

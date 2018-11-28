@@ -96,7 +96,7 @@
                                                             {{ "Total"|title }}
                                                         </th>
                                                             {% for session in sessions %}
-                                                                <td>
+                                                                <td class={{ get_session_class(session) }}>
                                                                     {% set row_data = buyer_session_totals.filter(unit=tabs[0], session=session) %}
                                                                     {% if row_data %}
 {#                                                                        {{ row_data[0].session }}#}

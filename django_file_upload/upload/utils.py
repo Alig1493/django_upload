@@ -1,7 +1,6 @@
 from math import isnan
 
 from django_file_upload.confirmation.models import Buyer, BuyerWiseCon, BuyerWiseTotal
-from django_file_upload.confirmation.utils import buyer_chain_reaction
 from django_file_upload.core.config import Session, UnitType
 
 
@@ -36,9 +35,15 @@ def insert_buyer_wise_data(payload):
 
 def calculate_monthly_totals():
 
-    for year in BuyerWiseCon.objects.distinct("year").values_list("year", flat=True):
+    years = BuyerWiseCon.objects.distinct("year").values_list("year", flat=True)
+    print("Calculating for years: ", years)
+
+    for year in years:
+        print("Going for year", year)
         for unit in UnitType.CHOICES:
+            print("Going for unit", unit)
             for session in Session.get_session_list():
+                print("Going for Session", session)
                 # calculate total of the month for all the buyers
                 total_value = BuyerWiseCon.month_total(unit=unit[0], session=session[0], year=year)
 
@@ -49,9 +54,20 @@ def calculate_monthly_totals():
                 }
 
                 # create total for each month of the individual buyer
-                buyerwise_total, created = BuyerWiseTotal.objects.update_or_create(total=total_value, defaults=defaults)
+                buyerwise_total = BuyerWiseTotal.objects.filter(**defaults)
 
-                if defaults["unit"] == 0 and defaults["session"] == 2 and defaults["year"] == 2018:
-                    print("Showing details for buyer total for february 2018 semi auto")
+                if buyerwise_total.exists():
+                    print("Buyerwise total exist so updating")
+                    buyerwise_total.update(total=total_value)
+                else:
+                    print("Buyerwise total doesn't exist so Creating")
+                    BuyerWiseTotal.objects.create(total=total_value, **defaults)
+
+                if defaults["year"] == 2018:
+                    print(BuyerWiseTotal.objects.filter(**defaults).values_list("total", "session", "unit", "year"))
+                    print(session)
+                    print(unit)
                     print(buyerwise_total)
-                    print(created)
+                    print(total_value)
+            print(BuyerWiseTotal.objects.filter(year=year, unit=unit[0])
+                  .values_list("total", "session", "unit", "year").count())

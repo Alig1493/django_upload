@@ -1,7 +1,3 @@
-import math
-
-from django.db.models import Sum
-
 from django_file_upload.core.config import Session, UnitType
 from django_file_upload.core.utils import get_session_division
 

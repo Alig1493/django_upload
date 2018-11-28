@@ -15,10 +15,10 @@ def get_model_name(value):
 def get_field_value(data, field):
 
     value = getattr(data, field)
-    if type(data) == SAH and field == "budget" and data.unit == UnitType.AUTO:
-        print("Data: ", data)
-        print("Field: ", field)
-        print("Value: ", value)
+    # if type(data) == SAH and field == "budget" and data.unit == UnitType.AUTO:
+        # print("Data: ", data)
+        # print("Field: ", field)
+        # print("Value: ", value)
     return round(value, 2) if value is not None else ''
 
 
@@ -34,6 +34,11 @@ def get_session_name(number):
 
 @library.global_function
 def get_session_class(number):
+
+    # print("================================================")
+    # print("Session name:", Session.CHOICES[number - 1][1])
+    # print("================================================")
+
     return "m" if number <= 12 else "o"
 
 
@@ -47,6 +52,7 @@ def is_buyerwise(data):
 @library.global_function
 def debugger(data):
     print("Inside template debugger")
+    print("Data is not none: ", data is not None)
     if isinstance(data, QuerySet):
         print(data.model)
     print(data)

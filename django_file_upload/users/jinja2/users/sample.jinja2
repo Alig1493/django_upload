@@ -68,13 +68,18 @@
                                                     {% for session in sessions %}
                                                         {% for row_data in item[1] %}
                                                             {% if row_data.session == session %}
-                                                                <th scope="col" class={{ get_session_class(session) }}>{{ get_session_name(session) }}</th>
+                                                                <th scope="col" class={{ get_session_class(session) }}>
+                                                                    {{ get_session_name(session) }}
+{#                                                                    {{ get_session_class(session) }}#}
+{#                                                                    {{ session }}#}
+                                                                </th>
                                                             {% endif %}
                                                         {% endfor %}
                                                     {% endfor %}
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                            {% set session_list = item[1].values_list("session", flat=True) %}
                                                 {% if is_buyerwise(item[0]._meta.model_name) %}
                                                     {% for buyer in buyers %}
                                                         <tr>
@@ -83,11 +88,13 @@
                                                             </th>
                                                             {% for session in sessions %}
                                                                 {% set row_data = item[1].filter(buyer=buyer, session=session) %}
-                                                                <td class={{ get_session_class(session) }}>
-                                                                    {% if row_data %}
-                                                                        {{ row_data[0].confirmed }}
-                                                                    {% endif %}
-                                                                </td>
+                                                                {% if session in session_list %}
+                                                                    <td class={{ get_session_class(session) }}>
+                                                                        {% if row_data %}
+                                                                            {{ row_data[0].confirmed }}
+                                                                        {% endif %}
+                                                                    </td>
+                                                                {% endif %}
                                                             {% endfor %}
                                                         </tr>
                                                     {% endfor %}
@@ -96,15 +103,18 @@
                                                             {{ "Total"|title }}
                                                         </th>
                                                             {% for session in sessions %}
-                                                                <td class={{ get_session_class(session) }}>
-                                                                    {% set row_data = buyer_session_totals.filter(unit=tabs[0], session=session) %}
-                                                                    {% if row_data %}
-{#                                                                        {{ row_data[0].session }}#}
+                                                                {% set row_data = buyer_session_totals.filter(unit=tabs[0], session=session) %}
+{#                                                                    {{ row_data }}#}
+{#                                                                    {{ debugger(row_data) }}#}
+                                                                {% if session in session_list %}
+                                                                    <td class={{ get_session_class(session) }}>
+{#                                                                                {{ row_data[0].session }}#}
                                                                         {{ row_data[0].total }}
-{#                                                                        {{ row_data[0].unit }}#}
-                                                                    {% endif %}
+{#                                                                                {{ row_data[0].unit }}#}
+                                                                    </td>
+
+                                                                {% endif %}
     {#                                                                {{ tabs }}#}
-                                                                </td>
                                                             {% endfor %}
                                                     </tr>
                                                 {% else %}

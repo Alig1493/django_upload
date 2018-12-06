@@ -4,18 +4,18 @@ ADMIN_EXCLUDE_FIELDS = ['created_at', 'updated_at']
 
 class Session(object):
     # started from 1 to make month more intiuitive
-    JAN = 1
-    FEB = 2
-    MAR = 3
-    APR = 4
-    MAY = 5
-    JUN = 6
-    JUL = 7
-    AUG = 8
-    SEP = 9
-    OCT = 10
-    NOV = 11
-    DEC = 12
+    JUL = 1
+    AUG = 2
+    SEP = 3
+    OCT = 4
+    NOV = 5
+    DEC = 6
+    JAN = 7
+    FEB = 8
+    MAR = 9
+    APR = 10
+    MAY = 11
+    JUN = 12
 
     Q1 = 13
     Q2 = 14
@@ -26,18 +26,18 @@ class Session(object):
     H2 = 18
 
     CHOICES = (
-        (JAN, "Jan"),
-        (FEB, "Feb"),
-        (MAR, "Mar"),
-        (APR, "Apr"),
-        (MAY, "May"),
-        (JUN, "Jun"),
         (JUL, "Jul"),
         (AUG, "Aug"),
         (SEP, "Sep"),
         (OCT, "Oct"),
         (NOV, "Nov"),
         (DEC, "Dec"),
+        (JAN, "Jan"),
+        (FEB, "Feb"),
+        (MAR, "Mar"),
+        (APR, "Apr"),
+        (MAY, "May"),
+        (JUN, "Jun"),
 
         (Q1, "Q1"),
         (Q2, "Q2"),

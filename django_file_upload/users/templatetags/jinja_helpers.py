@@ -52,6 +52,7 @@ def is_buyerwise(data):
 @library.global_function
 def debugger(data):
     print("Inside template debugger")
+    print(data)
     print("Data is not none: ", data is not None)
     if isinstance(data, QuerySet):
         print(data.model)

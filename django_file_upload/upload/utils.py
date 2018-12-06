@@ -4,9 +4,23 @@ from django_file_upload.confirmation.models import Buyer, BuyerWiseCon, BuyerWis
 from django_file_upload.core.config import Session, UnitType
 
 
+def get_adjusted_session(session):
+
+    max_month = 12
+    session += 6
+
+    if session > max_month:
+        session -= 12
+
+    return session
+
+
 def clean_dict(value):
     cleaned_dict = {k: value[k] for k in value if (isinstance(value[k], float) or
                                                    isinstance(value[k], int)) and not isnan(value[k])}
+    print("Previous session: ", cleaned_dict["session"])
+    cleaned_dict["session"] = get_adjusted_session(session=cleaned_dict["session"])
+    print("New session: ", cleaned_dict["session"])
     return cleaned_dict
 
 

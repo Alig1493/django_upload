@@ -12,15 +12,31 @@ def get_models():
 def get_model_fields(unit, **kwargs):
     data = {}
     for model in get_models():
-        preserved = Case(*[When(session=session, then=pos) for pos, session in enumerate(kwargs['session__in'])])
-        data[model] = (model.objects.filter(unit=unit, **kwargs)
-                       .order_by(preserved)
-                       .order_by("-created_at")
-                       .order_by("session")
-                       .distinct("session")
-                       # .order_by('session', '-created_at')
-                       # .distinct('session')
-                       )
+
+        queryset = model.objects.none()
+
+        for index in range(2):
+
+            year = kwargs.get("year")
+            session_list = kwargs['session__in'][:9]
+
+            if index > 0:
+                year = year + 1
+                session_list = kwargs['session__in'][9:]
+
+            print("Index: ", index)
+            print("QUerying for year: ", year)
+
+            preserved = Case(*[When(session=session, then=pos) for pos, session in enumerate(session_list)])
+
+            queryset |= (model.objects.filter(unit=unit, year=year)
+                                      .order_by(preserved)
+                                      .order_by("-created_at")
+                                      .order_by("session")
+                                      .distinct("session"))
+
+        data[model] = queryset
+
         if isinstance(model, BuyerWiseCon):
             print("Inside data generation")
             print(data)

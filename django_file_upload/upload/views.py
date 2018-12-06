@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import FormView, ListView
 
-from .models import FileDownload
+from .models import FileDownload, File
 from .forms import FileForm
 
 
@@ -24,8 +24,8 @@ class UploadView(LoginRequiredMixin, FormView):
 
 class FileListView(LoginRequiredMixin, ListView):
 
-    model = FileDownload
-    queryset = FileDownload.objects.order_by('-id')
+    model = File
+    queryset = File.objects.order_by('-id')
     context_object_name = "files"
     template_name = "upload/file_list.jinja2"
     login_url = 'auth:login'

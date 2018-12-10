@@ -71,6 +71,21 @@ class DashboardView(LoginRequiredMixin, TemplateView, ProcessFormView):
         context["sessions"] = session_list
         # Session.get_session_list(limit=self.get_session(year))
         context["unit_models"] = get_unit_models(session__in=session_list, year=self.get_current_year(**kwargs))
+        # print("==============================")
+        # print("==============================")
+        # print("==============================")
+        # print("==============================")
+        # for key, value in context["unit_models"].items():
+        #     print("Key:\n", key)
+        #     print("Value:\n", value)
+        #     if key == 0:
+        #         for k, v in value.items():
+        #             print("Semi auto keys:\n", k)
+        #             print("Semi auto values:\n", v.values())
+        # print("==============================")
+        # print("==============================")
+        # print("==============================")
+        # print("==============================")
         context["buyers"] = Buyer.objects.all().order_by("name")
         context["buyer_session_totals"] = BuyerWiseTotal.objects.filter(year=self.get_current_year(**kwargs))
         return context

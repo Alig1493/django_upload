@@ -53,7 +53,12 @@ def is_buyerwise(data):
 def debugger(data):
     print("Inside template debugger")
     print(data)
-    print("Data is not none: ", data is not None)
-    if isinstance(data, QuerySet):
-        print(data.model)
-    print(data)
+
+
+@library.global_function
+def get_field_total(field_name, total_dict):
+    print("Inside getting field total")
+    print(total_dict)
+    # print(getattr(total_dict, f"{field_name}__sum"))
+    print(total_dict.get(f"{field_name}__sum"))
+    return total_dict.get(f"{field_name}__sum")

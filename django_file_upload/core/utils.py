@@ -32,6 +32,10 @@ def calc_diff(minuend, subtrahend):
         return minuend
 
 
+def get_include_fields(model, exclude_fields=EXCLUDE_FIELDS):
+    return [f.name for f in model._meta.get_fields() if f.name not in exclude_fields]
+
+
 def get_session_division(month, session_length):
     # returns the session(quarter/half) number to which the month belongs to
     return int(math.ceil(month/session_length))
@@ -39,17 +43,37 @@ def get_session_division(month, session_length):
 
 def session_wise_calc(model, month, year, unit, session_length):
     session_division = get_session_division(month, session_length)
-    session_months_list = list(range(1, session_length+1))
-    session_list = [i*session_division for i in session_months_list]
-    exclude_fields = EXCLUDE_FIELDS
-    include_fields = [f.name for f in model._meta.get_fields() if f.name not in exclude_fields]
-    ids = model.objects.filter(unit=unit, session__in=session_list, year=year).order_by('session', 'created_at').distinct('session').values_list('id', flat=True)
+    include_fields = get_include_fields(model=model)
+    # print("Getting sessions for month:", month)
+    # print("Sessions:", Session.get_session_quarter(session=month)
+    #       if session_length == 3 else Session.get_session_half(session=month))
+
+    ids = model.objects.filter(unit=unit, session__in=(
+                                         Session.get_session_quarter(session=month)
+                                         if session_length == 3 else
+                                         Session.get_session_half(session=month)
+                                     ), year=year).order_by('session', 'created_at').distinct('session').values_list('id', flat=True)
     aggregate_args = [Sum(x) for x in include_fields]
     fields_sum = model.objects.filter(id__in=ids).aggregate(*aggregate_args)
     session_args = {}
     for field in include_fields:
         session_args[field] = fields_sum[f"{field}__sum"]
     session_base_number = Session.Q1-1 if session_length == 3 else Session.H1-1
+
+    # if year == 2019 and month == 7 and unit == 0:
+    #     print("==============================================")
+    #     print("==============================================")
+    #     print("==============================================")
+    #     print("==============================================")
+    #     print(model)
+    #     print(ids)
+    #     print(session_args)
+    #     print(session_base_number+session_division)
+    #     print("==============================================")
+    #     print("==============================================")
+    #     print("==============================================")
+    #     print("==============================================")
+
     return model.objects.update_or_create(year=year, unit=unit, session=session_base_number+session_division, defaults=session_args)
 
 

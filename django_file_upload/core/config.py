@@ -49,6 +49,10 @@ class Session(object):
     )
 
     @classmethod
+    def get_sessions(cls, start, stop):
+        return [i for i in range(start, stop)]
+
+    @classmethod
     def get_session_list(cls, limit=12):
         session_list = []
 
@@ -63,25 +67,25 @@ class Session(object):
     def get_session_quarter(cls, session):
 
         if session < 4:
-            return [cls.JAN, cls.FEB, cls.MAR]
+            return cls.get_sessions(start=1, stop=4)
 
         elif session < 7:
-            return [cls.APR, cls.MAY, cls.JUN]
+            return cls.get_sessions(start=4, stop=7)
 
         elif session < 10:
-            return [cls.JUL, cls.AUG, cls.SEP]
+            return cls.get_sessions(start=7, stop=10)
 
         else:
-            return [cls.OCT, cls.NOV, cls.DEC]
+            return cls.get_sessions(start=10, stop=13)
 
     @classmethod
     def get_session_half(cls, session):
 
         if session < 7:
-            return [cls.JAN, cls.FEB, cls.MAR, cls.APR, cls.MAY, cls.JUN]
+            return cls.get_sessions(start=1, stop=7)
 
         else:
-            return [cls.JUL, cls.AUG, cls.SEP, cls.OCT, cls.NOV, cls.DEC]
+            return cls.get_sessions(start=7, stop=13)
 
 
 class UnitType(object):

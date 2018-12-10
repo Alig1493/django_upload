@@ -87,7 +87,11 @@ class DashboardView(LoginRequiredMixin, TemplateView, ProcessFormView):
         # print("==============================")
         # print("==============================")
         context["buyers"] = Buyer.objects.all().order_by("name")
-        context["buyer_session_totals"] = BuyerWiseTotal.objects.filter(year=self.get_current_year(**kwargs))
+        context["buyer_session_totals"] = (BuyerWiseTotal.objects.filter(session__in=session_list[:9],
+                                                                         year=self.get_current_year(**kwargs)) |
+                                           BuyerWiseTotal.objects.filter(session__in=session_list[9:],
+                                                                         year=self.get_current_year(**kwargs) + 1)
+                                           )
         return context
 
     def post(self, request, *args, **kwargs):

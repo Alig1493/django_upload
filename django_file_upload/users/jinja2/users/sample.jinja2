@@ -84,12 +84,13 @@
                                             {% set session_list = item[1].values_list("session", flat=True) %}
                                                 {% if is_buyerwise(item[0]._meta.model_name) %}
                                                     {% for buyer in buyers %}
+                                                        {% set item_data = item[1].filter(buyer=buyer) %}
                                                         <tr>
                                                             <th scope="row">
                                                                 {{ buyer.name }}
                                                             </th>
                                                             {% for session in sessions %}
-                                                                {% set row_data = item[1].filter(buyer=buyer, session=session) %}
+                                                                {% set row_data = item_data.filter(session=session) %}
                                                                 {% if session in session_list %}
                                                                     <td class={{ get_session_class(session) }}>
                                                                         {% if row_data %}
@@ -98,14 +99,21 @@
                                                                     </td>
                                                                 {% endif %}
                                                             {% endfor %}
+                                                        <td class="o">
+                                                            {% if item_data %}
+                                                                {{ get_buyer_total(item_data) }}
+                                                            {% endif %}
+                                                        </td>
                                                         </tr>
                                                     {% endfor %}
                                                     <tr>
+                                                        {% set item_data = buyer_session_totals.filter(unit=tabs[0]) %}
                                                         <th scope="row">
                                                             {{ "Total"|title }}
                                                         </th>
+
                                                             {% for session in sessions %}
-                                                                {% set row_data = buyer_session_totals.filter(unit=tabs[0], session=session) %}
+                                                                {% set row_data = item_data.filter(session=session) %}
 {#                                                                    {{ row_data }}#}
 {#                                                                    {{ debugger(row_data) }}#}
                                                                 {% if session in session_list %}
@@ -116,10 +124,14 @@
                                                                         {% endif %}
 {#                                                                                {{ row_data[0].unit }}#}
                                                                     </td>
-
                                                                 {% endif %}
     {#                                                                {{ tabs }}#}
                                                             {% endfor %}
+                                                        <td class="o">
+                                                            {% if item_data %}
+                                                                {{ get_buyer_total(item_data) }}
+                                                            {% endif %}
+                                                        </td>
                                                     </tr>
                                                 {% else %}
                                                     {% for field in item[0]._meta.fields %}

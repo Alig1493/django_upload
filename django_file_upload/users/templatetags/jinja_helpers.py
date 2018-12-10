@@ -1,9 +1,7 @@
-from django.db.models import QuerySet
 from django_jinja import library
 
-from django_file_upload.capacity.models import SAH
 from django_file_upload.confirmation.models import BuyerWiseCon
-from django_file_upload.core.config import EXCLUDE_FIELDS, Session, UnitType
+from django_file_upload.core.config import EXCLUDE_FIELDS, Session
 
 
 @library.global_function
@@ -57,8 +55,29 @@ def debugger(data):
 
 @library.global_function
 def get_field_total(field_name, total_dict):
-    print("Inside getting field total")
-    print(total_dict)
-    # print(getattr(total_dict, f"{field_name}__sum"))
-    print(total_dict.get(f"{field_name}__sum"))
+    # print("Inside getting field total")
+    # print(total_dict)
+    # # print(getattr(total_dict, f"{field_name}__sum"))
+    # print(total_dict.get(f"{field_name}__sum"))
     return total_dict.get(f"{field_name}__sum")
+
+
+@library.global_function
+def get_buyer_total(queryset):
+
+    field = "total"
+    if queryset.model == BuyerWiseCon:
+        field = "confirmed"
+
+    overall_sum = 0
+    overall_values = queryset.filter(session__lt=13).values_list(field, flat=True)
+
+    # if field == "total":
+    #     print("Queryset values:", queryset.values())
+    #     print("overall values:", overall_values)
+
+    if overall_values:
+        for value in overall_values:
+            overall_sum += value
+
+    return overall_sum

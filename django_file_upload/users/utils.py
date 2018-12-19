@@ -48,16 +48,17 @@ def get_model_fields(unit, **kwargs):
 
         include_fields = get_include_fields(model=model)
         aggregate_args = [Sum(x) for x in include_fields]
-        print("Aggregate args:", aggregate_args)
 
         fields_sum = (model.objects.filter(id__in=queryset.values_list("id", flat=True))
                                    .exclude(session__gt=12).aggregate(*aggregate_args))
-        print("Fields sum:", fields_sum)
 
         data[model] = queryset
         data_total[model] = fields_sum
 
-        # if model._meta.model_name == MachineDay._meta.model_name:
+        if model._meta.model_name == MachineDay._meta.model_name and kwargs.get("year") == 2018 and unit == 0:
+            print("Aggregate args:", aggregate_args)
+            print("Fields sum:", fields_sum)
+
         #     print("Inside data generation")
         #     print(data)
         #     for k, v in data.items():

@@ -60,21 +60,29 @@ def session_wise_calc(model, month, year, unit, session_length):
         session_args[field] = fields_sum[f"{field}__sum"]
     session_base_number = Session.Q1-1 if session_length == 3 else Session.H1-1
 
-    # if year == 2019 and month == 7 and unit == 0:
-    #     print("==============================================")
-    #     print("==============================================")
-    #     print("==============================================")
-    #     print("==============================================")
-    #     print(model)
-    #     print(ids)
-    #     print(session_args)
-    #     print(session_base_number+session_division)
-    #     print("==============================================")
-    #     print("==============================================")
-    #     print("==============================================")
-    #     print("==============================================")
+    obj = model.objects.filter(year=year, unit=unit, session=session_base_number+session_division)
 
-    return model.objects.update_or_create(year=year, unit=unit, session=session_base_number+session_division, defaults=session_args)
+    if obj.exists():
+        obj.update(**session_args)
+    else:
+        model.objects.create(year=year, unit=unit, session=session_base_number + session_division, **session_args)
+
+    if year == 2018 and unit == 0 and session_base_number+session_division > 12:
+        print("==============================================")
+        print("==============================================")
+        print("==============================================")
+        print("==============================================")
+        print(model)
+        print(ids)
+        print(session_args)
+        print(fields_sum)
+        print(model.objects.get(year=year, unit=unit, session=session_base_number+session_division))
+        print("==============================================")
+        print("==============================================")
+        print("==============================================")
+        print("==============================================")
+
+    return obj
 
 
 def calc_monthly_total(model, month, year,):

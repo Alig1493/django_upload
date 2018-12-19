@@ -94,14 +94,14 @@
                                                                 {% if session in session_list %}
                                                                     <td class={{ get_session_class(session) }}>
                                                                         {% if row_data %}
-                                                                            {{ row_data[0].confirmed }}
+                                                                            {{ row_data[0].confirmed|format_value() }}
                                                                         {% endif %}
                                                                     </td>
                                                                 {% endif %}
                                                             {% endfor %}
                                                         <td class="o">
                                                             {% if item_data %}
-                                                                {{ get_buyer_total(item_data) }}
+                                                                {{ get_buyer_total(item_data)|format_value() }}
                                                             {% endif %}
                                                         </td>
                                                         </tr>
@@ -120,7 +120,7 @@
                                                                     <td class={{ get_session_class(session) }}>
 {#                                                                                {{ row_data[0].session }}#}
                                                                         {% if row_data %}
-                                                                            {{ row_data[0].total }}
+                                                                            {{ row_data[0].total|format_value() }}
                                                                         {% endif %}
 {#                                                                                {{ row_data[0].unit }}#}
                                                                     </td>
@@ -129,7 +129,7 @@
                                                             {% endfor %}
                                                         <td class="o">
                                                             {% if item_data %}
-                                                                {{ get_buyer_total(item_data) }}
+                                                                {{ get_buyer_total(item_data)|format_value() }}
                                                             {% endif %}
                                                         </td>
                                                     </tr>
@@ -149,12 +149,12 @@
 {#                                                                        {{ row_data.session }}#}
 {#                                                                        {{ session }}#}
                                                                         {% if row_data.session == session %}
-                                                                            <td class={{ get_session_class(session) }}>{{ get_field_value(row_data, field.name) }}</td>
+                                                                            <td class={{ get_session_class(session) }}>{{ get_field_value(row_data, field.name)|format_value() }}</td>
                                                                         {% endif %}
                                                                     {% endfor %}
                                                                 {% endfor %}
                                                                 <td class="o">
-                                                                    {{ get_field_total(field.name, unit_models[tabs[0]][1][item[0]]) }}
+                                                                    {{ get_field_total(field.name, unit_models[tabs[0]][1][item[0]])|format_value() }}
                                                                 </td>
                                                             {% endif %}
                                                         </tr>

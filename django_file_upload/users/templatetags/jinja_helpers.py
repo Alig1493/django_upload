@@ -81,3 +81,12 @@ def get_buyer_total(queryset):
             overall_sum += value
 
     return overall_sum
+
+
+@library.filter
+def format_value(value):
+    print(value)
+    print(type(value))
+    if not value or value == "":
+        return ""
+    return round(value) if isinstance(value, float) else value

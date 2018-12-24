@@ -64,12 +64,26 @@ class DashboardView(LoginRequiredMixin, TemplateView, ProcessFormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # THis gets the year forms for the users to select the years from
         context["form"] = self.get_form(**kwargs)
+
+        # Contains the units in tuples
         context["units"] = UnitType.CHOICES
+
+        # gets a list of models to populate the selection pills
         context["models"] = get_models()
+
+        # Gets all the available months in a year as well as the extra sessions such as H1, Q1
+        # See core config
         session_list = self.get_session_list()
         context["sessions"] = session_list
         # Session.get_session_list(limit=self.get_session(year))
+
+        # gets all the relevant data for display in the template
+        # data is returned as a dict of dict where the first level dict contains the
+        # units and their corresponding dict values
+        # and the second layer dict contians a tuple of yar wise model data as well as their totals
         context["unit_models"] = get_unit_models(session__in=session_list, year=self.get_current_year(**kwargs))
         # print("==============================")
         # print("==============================")
@@ -86,6 +100,8 @@ class DashboardView(LoginRequiredMixin, TemplateView, ProcessFormView):
         # print("==============================")
         # print("==============================")
         # print("==============================")
+
+        # buyers core functionality was changed so their information is sent seperately
         context["buyers"] = Buyer.objects.all().order_by("name")
         context["buyer_session_totals"] = (BuyerWiseTotal.objects.filter(session__in=session_list[:9],
                                                                          year=self.get_current_year(**kwargs)) |
